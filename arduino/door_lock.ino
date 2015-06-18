@@ -55,7 +55,6 @@ void setup() {
 }
 
 
-
 void loop() {
 
   long GMT = RTC.get() + 31; // RTC time + adjustment
