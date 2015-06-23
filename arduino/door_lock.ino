@@ -38,14 +38,14 @@ int buttonState = 0;
 
 Keypad keypad = Keypad( makeKeymap(keys), rowPins, colPins, ROWS, COLS );
 
-#define ledPin 8
+#define lockPin 8
 int pinSpeaker = 10;
 
 void setup() {
 
   pinMode(buttonPin, INPUT);
-  pinMode(ledPin, OUTPUT);
-  digitalWrite(ledPin, HIGH);
+  pinMode(lockPin, OUTPUT);
+  digitalWrite(lockPin, HIGH);
 
   Serial.begin(9600);
 
@@ -109,10 +109,10 @@ void guessPassword() {
     delay(300);
     tone(10, 5000, 100);
 
-    digitalWrite(ledPin, LOW);
+    digitalWrite(lockPin, LOW);
     Serial.println("OPENING DOOR ");
     delay(1000);
-    digitalWrite(ledPin, HIGH);
+    digitalWrite(lockPin, HIGH);
 
   }
 
