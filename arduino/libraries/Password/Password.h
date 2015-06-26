@@ -46,6 +46,11 @@
 
 #define STRING_TERMINATOR '\0'
 
+//modify by yoming
+#define LAST_PASSWORD_NUM 5
+
+
+
 class Password {
 public:
 	Password(char* pass);
@@ -54,7 +59,7 @@ public:
 	bool is(char* pass);
 	bool append(char character);
 	void reset();
-	bool evaluate();
+	int evaluate();
 	
 	//char* getPassword();
 	//char* getGuess();
@@ -65,8 +70,13 @@ public:
 	bool operator!=(char* pass);
 	Password &operator<<(char character);
 	
+
+bool showPasswd(int i, char * string);
+    
+    bool showguess(char *guesswd);
 private:
-	char* target;
+	char* target[LAST_PASSWORD_NUM];
+    
 	char guess[ MAX_PASSWORD_LENGTH ];
 	byte currentIndex;
 };
