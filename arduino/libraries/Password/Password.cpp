@@ -32,15 +32,42 @@
 
 #include "Password.h"
 
+#include <string.h>
+#include <avr/io.h>
+
+
 //construct object in memory, set all variables
 Password::Password(char* pass){
+    for(int i = 0; i < LAST_PASSWORD_NUM; i++)
+    {
+        target[i] = new char[MAX_PASSWORD_LENGTH];
+        memset(target[i], 0, MAX_PASSWORD_LENGTH);
+    }
 	set( pass );
 	reset();
 }
 
 //set the password
 void Password::set(char* pass){
-	target = pass;
+    for(int i = 0;i < LAST_PASSWORD_NUM-1; i++)
+    {
+        memcpy(target[i], target[i+1], MAX_PASSWORD_LENGTH);
+    }
+	memcpy(target[LAST_PASSWORD_NUM-1], pass, 6);
+
+   // target[0] = pass;
+}
+
+bool Password::showPasswd(int i, char * string)
+{
+    memcpy(string, target[i], MAX_PASSWORD_LENGTH);
+    //memcpy(string+7, guess, 7);
+    //string = target[0];
+}
+
+bool Password::showguess(char *guesswd)
+{
+    memcpy(guesswd, guess, MAX_PASSWORD_LENGTH);
 }
 
 //evaluate a string, is it equal to the password?
@@ -71,22 +98,47 @@ void Password::reset(){
 }
 
 //is the current guessed password equal to the target password?
-bool Password::evaluate(){ 
-	char pass = target[0];
+int Password::evaluate(){
+    byte init = 0;
+
+    for(byte j = 0; j< LAST_PASSWORD_NUM; j++)
+    {
+        // init code 000000
+        for(byte i=1; i<MAX_PASSWORD_LENGTH;i++)
+        {
+            if(target[j][i]==0 && i==MAX_PASSWORD_LENGTH-1) 
+            {
+                init = 1;
+            }
+            else
+            {
+                break;
+            }
+        }
+        if(init == 1)
+        {// this is init code 000000, abandon
+            init = 0;
+            continue;
+        }
+
+    	char pass = target[j][0];
 	char guessed = guess[0];
+
 	for (byte i=1; i<MAX_PASSWORD_LENGTH; i++){
 		
 		//check if guessed char is equal to the password char
 		if (pass==STRING_TERMINATOR && guessed==STRING_TERMINATOR){
 			return true; //both strings ended and all previous characters are equal 
 		}else if (pass!=guessed || pass==STRING_TERMINATOR || guessed==STRING_TERMINATOR){
-			return false; //difference OR end of string has been reached
+    			break; //difference OR end of string has been reached
 		}
 		
 		//read next char
-		pass = target[i];
+    		pass = target[j][i];
 		guessed = guess[i];
 	}
+    }
+    
 	return false; //a 'true' condition has not been met
 }
 
