@@ -5,6 +5,10 @@
 #include <Wire.h>
 #include <Time.h>
 #include <DS1307RTC.h>
+#include "TM1637.h"
+
+
+
 
 // Change it!
 // http://www.lucadentella.it/OTP/
@@ -41,6 +45,10 @@ Keypad keypad = Keypad( makeKeymap(keys), rowPins, colPins, ROWS, COLS );
 #define lockPin 8
 int pinSpeaker = 10;
 
+#define CLK 2
+#define DIO 3
+TM1637 tm1637(CLK, DIO);
+
 void setup() {
 
   pinMode(buttonPin, INPUT);
@@ -48,16 +56,21 @@ void setup() {
   digitalWrite(lockPin, HIGH);
 
   Serial.begin(9600);
+  Serial2.begin(9600);
 
   keypad.addEventListener(keypadEvent); // add an event listener for this keypad
   keypad.setDebounceTime(250);
+
+  tm1637.init();
+  tm1637.set(2);//0~7 bright
 
 }
 
 
 void loop() {
+serialEvent();
+ long GMT = RTC.get() + 31; // RTC time + adjustment
 
-  long GMT = RTC.get() + 31; // RTC time + adjustment
   char* newCode = totp.getCode(GMT);
 
   if (strcmp(code, newCode) != 0) {
@@ -94,26 +107,31 @@ void keypadEvent(KeypadEvent eKey) {
   }
 }
 
+void openDoor()
+{
+    tone(10, 5000, 100);
+    delay(300);
+    tone(10, 5000, 100);
+    delay(300);
+    tone(10, 5000, 100);
+    delay(300);
+    tone(10, 5000, 100);
+    digitalWrite(lockPin, LOW);
+    Serial.println("OPENING DOOR ");
+    delay(1000);
+    digitalWrite(lockPin, HIGH);
+  }
+
 void guessPassword() {
+    
   if (password.evaluate()) {
 
     Serial.println("VALID PASSWORD ");
     Serial.println();
     password.reset(); // resets password after correct entry
 
-    tone(10, 5000, 100);
-    delay(300);
-    tone(10, 5000, 100);
-    delay(300);
-    tone(10, 5000, 100);
-    delay(300);
-    tone(10, 5000, 100);
 
-    digitalWrite(lockPin, LOW);
-    Serial.println("OPENING DOOR ");
-    delay(1000);
-    digitalWrite(lockPin, HIGH);
-
+    openDoor();
   }
 
   else {
