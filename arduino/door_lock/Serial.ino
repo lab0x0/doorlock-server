@@ -5,6 +5,13 @@ void serialEvent()
   if(Serial2.available())
   {
     get_char = (char)Serial2.read();
+    if(get_char != '+')
+    {
+      Serial.print("start char :");
+      Serial.println(get_char);
+      return;
+    }
+        get_char = (char)Serial2.read();
     switch(get_char)
     {
       case 'o':
