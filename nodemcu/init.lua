@@ -7,6 +7,8 @@ gpio.mode(pin1,gpio.OUTPUT)
 ready = 0
 wifi.setmode(wifi.STATION)
 
+count = 0
+
 wifi.sta.config("ssid_name","ssid_password") -- wifi settings
 
 function wifi_connect()
@@ -54,7 +56,19 @@ tmr.alarm(2, 30000000, 1, function() -- restart every 5 minites (need to rewrite
 
 
 function main_prog()
-  m:on("message", function(conn, topic, msg)   
-     print(msg)   
-  end)  
+   m:on("message", function(conn, topic, msg)     
+
+       if (msg=="open") then
+          print("+o")
+       elseif (msg==nil) then
+          -- invalid comand
+       elseif string.match(msg, "^counter:") then
+          count = string.match(msg, "%d+")
+          print("+c"..count)  
+    
+       else  
+          -- invalid comand
+       end 
+
+   end)  
 end
