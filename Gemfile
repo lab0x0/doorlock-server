@@ -39,6 +39,7 @@ gem 'multi_json'
 gem 'nokogiri'
 gem 'mqtt', :git => 'https://github.com/njh/ruby-mqtt.git'
 gem 'rotp'
+gem 'dotenv-rails'
 
 group :production do
   gem 'puma'
@@ -51,7 +52,6 @@ group :development, :test do
   gem 'pry-rails'
   gem 'capistrano-rails'
   gem 'capistrano-bundler'
-  gem 'dotenv-rails'
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   # gem 'byebug'
 

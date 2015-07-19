@@ -15,15 +15,11 @@
 /log/*
 !/log/.keep
 /tmp
-.env
+
 TODO.txt
-
+.env
 .nodemcu
-
 .arduino
-
 config/deploy.rb
-
 config/deploy/production.rb
-
 config/puma/production.rb
