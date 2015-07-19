@@ -25,3 +25,5 @@ TODO.txt
 config/deploy.rb
 
 config/deploy/production.rb
+
+config/puma/production.rb
