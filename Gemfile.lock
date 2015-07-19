@@ -55,13 +55,6 @@ GEM
       capistrano (~> 3.1)
       capistrano-bundler (~> 1.1)
     coderay (1.1.0)
-    coffee-rails (4.1.0)
-      coffee-script (>= 2.2.0)
-      railties (>= 4.0.0, < 5.0)
-    coffee-script (2.4.1)
-      coffee-script-source
-      execjs
-    coffee-script-source (1.9.1.1)
     colorize (0.7.7)
     domain_name (0.5.24)
       unf (>= 0.0.5, < 1.0.0)
@@ -69,12 +62,10 @@ GEM
     dotenv-rails (2.0.1)
       dotenv (= 2.0.1)
     erubis (2.7.0)
-    execjs (2.5.2)
     faraday (0.9.1)
       multipart-post (>= 1.2, < 3)
     globalid (0.3.5)
       activesupport (>= 4.1.0)
-    hex_string (1.0.1)
     http-cookie (1.0.2)
       domain_name (~> 0.5)
     i18n (0.7.0)
@@ -136,13 +127,6 @@ GEM
       mime-types (>= 1.16, < 3.0)
       netrc (~> 0.7)
     rotp (2.1.1)
-    sass (3.4.16)
-    sass-rails (5.0.3)
-      railties (>= 4.0.0, < 5.0)
-      sass (~> 3.1)
-      sprockets (>= 2.8, < 4.0)
-      sprockets-rails (>= 2.0, < 4.0)
-      tilt (~> 1.1)
     simple_wechat (0.0.1)
       faraday (~> 0.9)
       multi_json (~> 1.2)
@@ -160,7 +144,6 @@ GEM
       net-ssh (>= 2.8.0)
     thor (0.19.1)
     thread_safe (0.3.5)
-    tilt (1.4.1)
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
     unf (0.1.4)
@@ -175,10 +158,8 @@ PLATFORMS
 DEPENDENCIES
   capistrano-bundler
   capistrano-rails
-  coffee-rails (~> 4.1.0)
   dotenv-rails
   faraday
-  hex_string
   mqtt!
   multi_json
   nokogiri
@@ -187,7 +168,6 @@ DEPENDENCIES
   puma
   rails (= 4.2.3)
   rotp
-  sass-rails (~> 5.0)
   simple_wechat
   sqlite3
   wechat-adapter
