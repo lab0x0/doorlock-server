@@ -121,6 +121,7 @@ deluser - delete a user
   private
 
   def parse_message_and_get_current_user
+    check_wechat_signature
     parse_message
     current_user
     check_access
@@ -152,6 +153,11 @@ Please copy it and send to 👉 #{Rails.application.secrets.admin}
       render :template => "messages/text", :formats => :xml if current_user.nil?
     end
     # TODO: добавить проверку на suspended
+  end
+
+  def check_wechat_signature
+    array = [Rails.application.secrets.app_token, params[:timestamp], params[:nonce]].sort
+    render :text => "Forbidden", :status => 403 if params[:signature] != Digest::SHA1.hexdigest(array.join)
   end
 
 end
