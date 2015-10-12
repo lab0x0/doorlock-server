@@ -13,9 +13,10 @@ group :production do
   gem 'therubyracer', platforms: :ruby
 end
 
-group :development, :test do
+group :development do
   gem 'pry'
   gem 'pry-rails'
   gem 'capistrano-rails'
   gem 'capistrano-bundler'
+  gem "airbrussh"
 end
