@@ -3,7 +3,7 @@ class MessagesController < ApplicationController
   before_action :parse_message_and_get_current_user
 
   def receive
-    
+
     # key
     if @message.options[:message_type] == :text and @message.options[:content].downcase == 'key' and current_user.member?
 
@@ -13,16 +13,6 @@ class MessagesController < ApplicationController
 
     # unsubscribe/unsubscribe
     elsif @message.options[:message_type] == :event and  (@message.options[:event] == :subscribe or @message.options[:event] == :unsubscribe)
-
-      # TODO: токен надо хранить в файле pstore yaml, убрать копипаст
-      api = Wechat::Adapter::WechatAPI.new(Rails.application.secrets.app_id, Rails.application.secrets.app_secret)
-      count = (api.get 'user/get')['count']
-
-      client = MQTT::Client.connect(Rails.application.secrets.mqtt_server)
-      msg =  "counter:#{count}"
-      client.publish(Rails.application.secrets.mqtt_topic, msg, retain=false)
-      client.disconnect()
-
       head 200
 
     # adduser
@@ -47,7 +37,7 @@ class MessagesController < ApplicationController
             @sending_text = "😧"
             render :template => "messages/text", :formats => :xml
           end
-          
+
         else
           @sending_text = "😧 user should follow wechat account"
           render :template => "messages/text", :formats => :xml
@@ -81,13 +71,13 @@ class MessagesController < ApplicationController
           old_user.destroy
 
           @sending_text = "👌 user has deleted"
-          render :template => "messages/text", :formats => :xml              
+          render :template => "messages/text", :formats => :xml
 
         else
-    
+
           @sending_text = "😧 you can not delete admin"
-          render :template => "messages/text", :formats => :xml          
-        
+          render :template => "messages/text", :formats => :xml
+
         end
 
       else
@@ -98,12 +88,12 @@ class MessagesController < ApplicationController
     # help
     elsif @message.options[:message_type] == :text and (@message.options[:content].downcase =~ /^help.*/) != nil and current_user.admin?
       @sending_text = <<-eos
-Commands: 
+Commands:
 
 users - list all users
 
-adduser - add a new user 
-👉 example: adduser o8POWszdG1T0ZEVYv5qWrZxO0BAM  
+adduser - add a new user
+👉 example: adduser o8POWszdG1T0ZEVYv5qWrZxO0BAM
 
 deluser - delete a user
 👉 example: deluser 1
@@ -142,13 +132,13 @@ deluser - delete a user
       @sending_text = <<-eos
 This is your wechat id ☝️
 
-#{@message.options[:to_user]} 
+#{@message.options[:to_user]}
 
-Please copy it and send to 👉 #{Rails.application.secrets.admin} 
+Please copy it and send to 👉 #{Rails.application.secrets.admin}
       eos
 
       render :template => "messages/text", :formats => :xml
-    else 
+    else
       @sending_text = "💩 access denied"
       render :template => "messages/text", :formats => :xml if current_user.nil?
     end
