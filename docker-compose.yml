@@ -1,0 +1,12 @@
+version: '2'
+services:
+  doorlock:
+    container_name: doorlock
+    image: targence/doorlock
+    ports:
+      - "8001:4567"
+    build: .
+    volumes:
+      - ./db:/app/db
+    env_file: .env
+    command: "${DOCKER_CMD}"

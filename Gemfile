@@ -1,22 +1,23 @@
-source 'https://rubygems.org'
+# source 'https://rubygems.org'
+source 'https://ruby.taobao.org' # for China
 
-gem 'rails', '4.2.3'
+gem 'sinatra'
+gem "sinatra-activerecord"
 gem 'sqlite3'
 
 gem 'wechat-adapter'
+gem 'nokogiri'
 gem 'rotp'
-gem 'dotenv-rails'
 
 group :production do
-  gem 'puma', '~> 2.14.0'
-  # gem 'uglifier', '>= 1.3.0'
-  # gem 'therubyracer', platforms: :ruby
+  gem 'puma'
 end
 
 group :development do
+  gem 'dotenv'
+  gem 'rb-readline'
+  gem 'rerun'
+  gem 'awesome_print'
   gem 'pry'
-  gem 'pry-rails'
-  gem 'capistrano-rails'
-  gem 'capistrano-bundler'
-  gem "airbrussh"
+  gem 'pry-remote'
 end
