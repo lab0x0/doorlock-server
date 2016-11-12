@@ -18,6 +18,5 @@
 
 TODO.txt
 .env
-.nodemcu
 .arduino
 config/puma/production.rb

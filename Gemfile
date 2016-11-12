@@ -8,9 +8,9 @@ gem 'rotp'
 gem 'dotenv-rails'
 
 group :production do
-  gem 'puma'
-  gem 'uglifier', '>= 1.3.0'
-  gem 'therubyracer', platforms: :ruby
+  gem 'puma', '~> 2.14.0'
+  # gem 'uglifier', '>= 1.3.0'
+  # gem 'therubyracer', platforms: :ruby
 end
 
 group :development do
