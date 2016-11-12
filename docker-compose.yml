@@ -5,7 +5,6 @@ services:
     image: targence/doorlock
     ports:
       - "127.0.0.1:8002:4567"
-    build: .
     volumes:
       - ./db:/app/db
     env_file: .env
