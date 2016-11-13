@@ -3,7 +3,7 @@ require "sinatra"
 require 'sinatra/activerecord'
 set :database, {adapter: "sqlite3", database: "./db/doorlock.sqlite3"}
 
-# require 'pry'
+require 'pry' # for debuging
 require 'nokogiri'
 require 'wechat/adapter'
 require 'rotp'
@@ -17,15 +17,23 @@ def current_user
    User.find_by_openid(@message.options[:to_user])
 end
 
-get "/" do
+before "/*" do
   if params[:signature]
     array = [ENV['APP_TOKEN'], params[:timestamp], params[:nonce]].sort
     if params[:signature] == Digest::SHA1.hexdigest(array.join)
-      params[:echostr]
+      @verified = true
     else
-      status 418
-      body "Forbidden"
+      @verified = false
     end
+  end
+end
+
+get "/" do
+  if @verified == true
+    params[:echostr]
+  elsif @verified == false
+    status 418
+    body "Forbidden"
   else
     status 200
     body "OK"
@@ -36,7 +44,11 @@ post "/" do
 
   @message = MessageParser.parse(request.body.read)
 
-  if current_user && current_user.admin?
+  if @verified == false
+    status 418
+    body "Forbidden"
+
+  elsif current_user && current_user.admin?
 
     case @message.options[:content]
     when /^users.*/i
@@ -66,33 +78,38 @@ post "/" do
       else
         @sending_text = "😧 can't delete admin"
       end
+    when /^membership.*/i
+      @sending_text = "This is your wechat id 👇\n\n#{@message.options[:to_user]}\n\nPlease copy it and send to administrator"
+    when /^key.*/i
+      totp = ROTP::TOTP.new(ENV['TOTP_TOKEN'])
+      @sending_text = "🔑 " + totp.at(Time.now + 5) + "#"
     when /^help.*/i
-      @sending_text = "COMMANDS\n\nNOT MEMBERS:\n• membership - how to become a member\n\nMEMBERS:\n• key - get a key for the doorlock\n\nADMINS:\n• users - list all users\n• adduser - add a new user\n 👉 example: adduser o8POWszdG1T0ZEVYv5qWrZxO0BAM 肖红\n• deluser - delete a user\n 👉 example: deluser 1"
+      @sending_text = "✻ COMMANDS ✻\n\nNOT MEMBERS:\n● membership - how to become a member\n\nMEMBERS:\n● key - get a key for the doorlock\n\nADMINS:\n● users - list all users\n● adduser - add a new user\n 👉 example: adduser o8POWszdG1T0ZEVYv5qWrZxO0BAM 肖红\n● deluser - delete a user\n 👉 example: deluser 1"
     else
       @sending_text = "💩 听不懂"
     end
 
-    elsif current_user && current_user.member?
+  elsif current_user && current_user.member?
 
-      case @message.options[:content]
-      when /^membership.*/i
-        @sending_text = "This is your wechat id ☝️\n\n#{@message.options[:to_user]}\n\nPlease copy it and send to administrator"
-      when /^key.*/i
-        totp = ROTP::TOTP.new(ENV['TOTP_TOKEN'])
-        @sending_text = "🔑 " + totp.at(Time.now + 5) + "#"
-      when /^help.*/i
-        @sending_text = "COMMANDS\n\nNOT MEMBERS:\n• membership - how to become a member\n\nMEMBERS:\n• key - get a key for the doorlock"
-      else
-        @sending_text = "💩 听不懂"
-      end
+    case @message.options[:content]
+    when /^membership.*/i
+      @sending_text = "This is your wechat id 👇\n\n#{@message.options[:to_user]}\n\nPlease copy it and send to administrator"
+    when /^key.*/i
+      totp = ROTP::TOTP.new(ENV['TOTP_TOKEN'])
+      @sending_text = "🔑 " + totp.at(Time.now + 5) + "#"
+    when /^help.*/i
+      @sending_text = "✻ COMMANDS ✻\n\nNOT MEMBERS:\n● membership - how to become a member\n\nMEMBERS:\n● key - get a key for the doorlock"
+    else
+      @sending_text = "💩 听不懂"
+    end
 
   else # not members
 
     case @message.options[:content]
     when /^membership.*/i
-      @sending_text = "This is your wechat id ☝️\n\n#{@message.options[:to_user]}\n\nPlease copy it and send to administrator"
+      @sending_text = "This is your wechat id 👇\n\n#{@message.options[:to_user]}\n\nPlease copy it and send to administrator"
     when /^help.*/i
-      @sending_text = "COMMANDS\n\nNOT MEMBERS:\n• membership - how to become a member\n\nMEMBERS:\n• key - get a key for the doorlock"
+      @sending_text = "✻ COMMANDS ✻\n\nNOT MEMBERS:\n● membership - how to become a member"
     else
       @sending_text = "💩 听不懂"
     end

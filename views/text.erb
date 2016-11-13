@@ -1,6 +1,6 @@
 <xml>
-<ToUserName><![CDATA[<%= @message%>]]></ToUserName>
-<FromUserName><![CDATA[<%= @message%>]]></FromUserName>
+<ToUserName><![CDATA[<%= @message.options[:to_user]%>]]></ToUserName>
+<FromUserName><![CDATA[<%= @message.options[:from_user]%>]]></FromUserName>
 <CreateTime><%= Time.now.to_i %></CreateTime>
 <MsgType><![CDATA[text]]></MsgType>
 <Content><![CDATA[<%= @sending_text %>]]></Content>
