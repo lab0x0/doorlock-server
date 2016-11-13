@@ -1,0 +1,12 @@
+version: '2'
+services:
+  doorlock:
+    container_name: doorlock
+    image: targence/doorlock
+    build:
+      context: .    
+    ports:
+      - "127.0.0.1:8002:4567"
+    volumes:
+      - ./db:/app/db
+    env_file: .env
