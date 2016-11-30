@@ -4,7 +4,7 @@ RUN apk add --no-cache bash nano sqlite sqlite-dev
 
 RUN mkdir -p /app
 WORKDIR /app
-COPY Gemfile /app/
+COPY Gemfile* /app/
 
 RUN apk add --no-cache build-base \
   && bundle install --quiet \
