@@ -1,5 +1,5 @@
-# source 'https://rubygems.org'
-source 'https://ruby.taobao.org' # for China
+source 'https://rubygems.org'
+# source 'https://ruby.taobao.org' # for China
 
 gem 'sinatra'
 gem "sinatra-activerecord"
