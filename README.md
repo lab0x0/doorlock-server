@@ -6,13 +6,14 @@ docker run -d   -p 127.0.0.1:8002:4567  -v "$(pwd)/db:/app/db" -e  APP_ID="12345
 ```
 
 ```
-## BUILD IMAGE
+## PULL IMAGE FROM: hub.docker.com/r/targence/doorlock
+
+docker pull targence/doorlock
+```
+
+
+```
+## OR BUILD IMAGE
 
 docker build --no-cache  . -t targence/doorlock
-```
-
-```
-## PUSH IMAGE
-
-docker push targence/doorlock
 ```
