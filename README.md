@@ -16,3 +16,12 @@ docker pull targence/doorlock
 
 docker build --no-cache  . -t targence/doorlock
 ```
+
+
+```
+## MAKE USER ADMIN OR EDIT USERS MANUALLY
+docker exec -ti doorlock bash
+irb
+require './app.rb'
+User.find(24).update_attributes type: "Users::Admin"
+```
